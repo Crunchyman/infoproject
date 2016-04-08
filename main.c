@@ -8,10 +8,6 @@
 
 typedef enum { BLUE, RED } colorType;
 typedef enum { EMPTY, WATER, RTRAP, BTRAP, FLAGRED, FLAGBLUE } state;
-<<<<<<< HEAD
-/*
-
-=======
 /*  initialiser le tableau 9x7 donc display
  * definir les positions initialement //done
  * definir la place des pieges et tout ca.
@@ -24,11 +20,6 @@ typedef enum { EMPTY, WATER, RTRAP, BTRAP, FLAGRED, FLAGBLUE } state;
  * definir le drapeau.
  * */
 /*
-<<<<<<< HEAD
-=======
-//hello this has been changed
->>>>>>> upstream/master
->>>>>>> 6d937cca2ad2a1c4fe99a1c1729805de482ad1c0
 USE STR COPY !!!
 //done
 */
