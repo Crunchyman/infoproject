@@ -156,7 +156,7 @@ void gameinit(playerPieces Blue[], playerPieces Red[], playerPieces* nothing, ta
 		}
 		if(j == 2) {
 		    tab[i][j].Player = Red[2];
-		    tab[i][j].State = EMPTY
+		    tab[i][j].State = EMPTY;
 		}
 		if(j == 4) {
 		    tab[i][j].Player = Red[4];
@@ -214,8 +214,15 @@ void playerRandomizer(int* player) // done but adapt to blue and red
 void checkMoves()
 {
 }
-void answer()
+void answer(playerPieces Blue[],playerPieces Red[],table tab[][DimC])
 {
+    int lign, col;
+    do {
+	printf("Which piece would you like to move ? (X,Y)");
+	scanf(" %d %d", &lign, &col);
+    } while((lign < 1 || lign > 9) || (col < 1 || col > 7));
+    if(tab[lign - 1][col - 1].Player.color == BLUE) {
+    }
 }
 void gameChecker()
 {
@@ -372,10 +379,11 @@ void pieceChooser()
 void movePiece()
 {
 }
-void getGameInfo()
+void getGameInfo(playerPieces Blue[], playerPieces Red[],table tab[][DimC], int lign, int col)
 { // NOT DONE
+	int i;
     printf("Blue:\n");
-    (Blue[i].color == BLUE) ? printf("blue") : printf("error blue");
+    (tab[lign][col].Player.color == BLUE) ? printf("blue") : printf("error blue");
     printf("\t Order: %d\n", Blue[i].order);
     printf("\t inwater: %d\n", Blue[i].inWater);
     printf("\t canwater: %d\n", Blue[i].canWater);
