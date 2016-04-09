@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #define DimL 9
 #define DimC 7
 #define DIM_CHAR 50
@@ -49,14 +50,15 @@ struct tableHolder {
 typedef struct tableHolder table;
 
 //***************************SUB PROGRAMS **********************************
-void playerRandomizer(int* player);                                                          // DONE, ralph
+void playerRandomizer(colorType* player);                                                    // DONE, ralph
 void gameinit(playerPieces B[], playerPieces R[], playerPieces* nothing, table tab[][DimC]); // DONE, ralph
-void playerChooser(int* player);                                                             // DONE, ralph
+void playerChooser(colorType* player);                                                       // DONE, ralph
 void pieceInit(playerPieces Blue[], playerPieces Red[]);                                     // DONE, ralph
 //**************************END OF SUBPROGRAMS******************************
 int main()
 {
-    int player;
+    srand(time(NULL));
+    colorType player;
     playerPieces Blue[NUMOFPIECES];
     playerPieces Red[NUMOFPIECES];
     playerPieces nothing;
@@ -202,26 +204,56 @@ void gameinit(playerPieces Blue[], playerPieces Red[], playerPieces* nothing, ta
     }
 }
 
-void playerChooser(int* player) // done adapt to blue and red
+void playerChooser(colorType* player) // done adapt to blue and red
 {
-    *player = *player % 2 + 1;
+    // blue = 1 red =2
+    int p;
+    if(*player == BLUE)
+	p = 1;
+    if(*player == RED)
+	p = 2;
+    p = p % 2 + 1;
+    if(p == 1)
+	*player = BLUE;
+    if(p == 2)
+	*player = RED;
 }
 
-void playerRandomizer(int* player) // done but adapt to blue and red
+void playerRandomizer(colorType* player) // done but adapt to blue and red
 {
-    *player = (rand() % 2) + 1;
+
+    int p;
+    p = (rand() % 2) + 1;
+    if(p == 1)
+	*player = BLUE;
+    if(p == 2)
+	*player = RED;
 }
-void checkMoves()
+void checkMoves(table tab[][DimC], int lign, int col)
 {
+    if()
 }
-void answer(playerPieces Blue[],playerPieces Red[],table tab[][DimC])
+void answer(playerPieces Blue[], playerPieces Red[], table tab[][DimC])
 {
     int lign, col;
     do {
 	printf("Which piece would you like to move ? (X,Y)");
 	scanf(" %d %d", &lign, &col);
     } while((lign < 1 || lign > 9) || (col < 1 || col > 7));
+    getinfo();
     if(tab[lign - 1][col - 1].Player.color == BLUE) {
+	// analyse his moves
+	checkMoves();
+	// move his piece
+	movePiece();
+    } else if(tab[lign - 1][col - 1].Player.color == RED) {
+	// analyse his moves
+	checkMoves();
+	// move his piece
+	movePiece();
+    } else {
+	printf("Error occured while analysing the answer");
+	exit(EXIT_FAILURE);
     }
 }
 void gameChecker()
@@ -373,16 +405,13 @@ void pieceInit(playerPieces Blue[], playerPieces Red[]) // ralph
 void Display()
 {
 }
-void pieceChooser()
-{
-}
 void movePiece()
 {
 }
-void getGameInfo(playerPieces Blue[], playerPieces Red[],table tab[][DimC], int lign, int col)
+void getGameInfo(table tab[][DimC], int lign, int col)
 { // NOT DONE
-	int i;
-    printf("Blue:\n");
+    char color[DIM_CHAR];
+    (tab[lign][col].Player.color == BLUE) ? color = "Blue" : color = "Red";
     (tab[lign][col].Player.color == BLUE) ? printf("blue") : printf("error blue");
     printf("\t Order: %d\n", Blue[i].order);
     printf("\t inwater: %d\n", Blue[i].inWater);
@@ -392,7 +421,7 @@ void getGameInfo(playerPieces Blue[], playerPieces Red[],table tab[][DimC], int 
     printf("\t Character: %c\n", Blue[i].character);
     printf("\t subCharacter: %c\n\n", Blue[i].subcharacter);
     printf("Red:\n");
-    (Red[i].color == RED) ? printf("red") : printf("error red");
+    (tab[lign][col].Player.color == RED) ? printf("red") : printf("error red");
     printf("\t Order: %d\n", Red[i].order);
     printf("\t inwater: %d\n", Red[i].inWater);
     printf("\t canwater: %d\n", Red[i].canWater);
@@ -400,4 +429,14 @@ void getGameInfo(playerPieces Blue[], playerPieces Red[],table tab[][DimC], int 
     printf("\t name: %s\n", Red[i].name);
     printf("\t Character: %c\n", Red[i].character);
     printf("\t subCharacter: %c\n\n", Red[i].subcharacter);
+}
+char* getColor(colorType player)
+{
+    switch(player) {
+    case BLUE:
+	return "BLUE";
+    case RED:
+	return "RED";
+    }
+    return 0;
 }
