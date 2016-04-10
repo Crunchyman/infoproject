@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <windows.h>
 #define DimL 9
 #define DimC 7
 #define DIM_CHAR 50
@@ -54,6 +55,7 @@ void playerRandomizer(colorType* player);                                       
 void gameinit(playerPieces B[], playerPieces R[], playerPieces* nothing, table tab[][DimC]); // DONE, ralph
 void playerChooser(colorType* player);                                                       // DONE, ralph
 void pieceInit(playerPieces Blue[], playerPieces Red[]);                                     // DONE, ralph
+void movePiece();
 //**************************END OF SUBPROGRAMS******************************
 int main()
 {
@@ -65,143 +67,6 @@ int main()
     table tab[DimL][DimC];
     playerRandomizer(&player);
     gameinit(Blue, Red, &nothing, tab);
-}
-
-void gameinit(playerPieces Blue[], playerPieces Red[], playerPieces* nothing, table tab[][DimC])
-{
-    int i, j;
-
-    // initialisation of a case where there is nothing
-    nothing->canLeep = 0;
-    nothing->canWater = 0;
-    nothing->character = ' ';
-    nothing->subcharacter = ' ';
-    nothing->color = 0;
-    nothing->order = -1;
-    nothing->inWater = 0;
-
-    pieceInit(Blue, Red);
-    for(i = 0; i < DimL; i++) {
-	for(j = 0; j < DimC; j++) {
-
-	    // initialisation of BLUE PIECES
-	    if(i == 0) {
-		if(j == 0) {
-		    tab[i][j].Player = Blue[6];
-		    tab[i][j].State = EMPTY;
-		}
-
-		if((j == 2) || (j == 4) || (j == 3)) {
-		    tab[i][j].State = BTRAP; // define place for trap
-		    tab[i][j].Player.order = -1;
-		}
-
-		if(j == 3) {
-		    tab[i][j].State = FLAGBLUE; // define place for flag
-		    tab[i][j].Player.order = -1;
-		}
-		if(j == 6) {
-		    tab[i][j].Player = Blue[5];
-		    tab[i][j].State = EMPTY;
-		}
-	    }
-
-	    if(i == 1) {
-
-		if(j == 1) {
-		    tab[i][j].Player = Blue[3];
-		    tab[i][j].State = EMPTY;
-		}
-		if(j == 3) {
-		    tab[i][j].Player.order = -1;
-		}
-		if(j == 5) {
-		    tab[i][j].Player = Blue[1];
-		    tab[i][j].State = EMPTY;
-		}
-	    }
-
-	    if(i == 2) {
-		if(j == 0) {
-		    tab[i][j].Player = Blue[0];
-		    tab[i][j].State = EMPTY;
-		}
-		if(j == 2) {
-		    tab[i][j].Player = Blue[4];
-		    tab[i][j].State = EMPTY;
-		}
-		if(j == 4) {
-		    tab[i][j].Player = Blue[2];
-		    tab[i][j].State = EMPTY;
-		}
-		if(j == 6) {
-		    tab[i][j].Player = Blue[7];
-		    tab[i][j].State = EMPTY;
-		}
-	    }
-
-	    // intialisation of water
-	    if(i == 3 || i == 4 || i == 5) {
-
-		if(j == 1 || j == 2 || j == 4 || j == 5) {
-		    tab[i][j].Player = *nothing;
-		    tab[i][j].State = WATER;
-		}
-	    }
-
-	    //************** INITIALISATION OF RED PIECES**************
-	    if(i == 6) {
-
-		if(j == 0) {
-		    tab[i][j].Player = Red[7];
-		    tab[i][j].State = EMPTY;
-		}
-		if(j == 2) {
-		    tab[i][j].Player = Red[2];
-		    tab[i][j].State = EMPTY;
-		}
-		if(j == 4) {
-		    tab[i][j].Player = Red[4];
-		    tab[i][j].State = EMPTY;
-		}
-		if(j == 6) {
-		    tab[i][j].Player = Red[0];
-		    tab[i][j].State = EMPTY;
-		}
-	    }
-	    if(i == 7) {
-		if(j == 1) {
-		    tab[i][j].Player = Red[1];
-		    tab[i][j].State = EMPTY;
-		}
-		if(j == 3) {
-		    tab[i][j].Player.order = -1;
-		    tab[i][j].State = RTRAP;
-		}
-		if(j == 5) {
-		    tab[i][j].Player = Red[3];
-		    tab[i][j].State = EMPTY;
-		}
-	    }
-	    if(i == 8) {
-		if(j == 0) {
-		    tab[i][j].Player = Red[5];
-		    tab[i][j].State = EMPTY;
-		}
-		if(j == 2 || j == 4) {
-		    tab[i][j].Player.order = -1;
-		    tab[i][j].State = RTRAP;
-		}
-		if(j == 6) {
-		    tab[i][j].Player = Red[6];
-		    tab[i][j].State = EMPTY;
-		}
-	    } else {
-		tab[i][j].State = EMPTY;
-		tab[i][j].Player = *nothing;
-	    }
-	}
-    }
 }
 
 void playerChooser(colorType* player) // done adapt to blue and red
@@ -229,36 +94,72 @@ void playerRandomizer(colorType* player) // done but adapt to blue and red
     if(p == 2)
 	*player = RED;
 }
+
 void checkMoves(table tab[][DimC], int lign, int col)
 {
-    if()
-}
-void answer(playerPieces Blue[], playerPieces Red[], table tab[][DimC])
-{
-    int lign, col;
+    int answer;
     do {
-	printf("Which piece would you like to move ? (X,Y)");
-	scanf(" %d %d", &lign, &col);
-    } while((lign < 1 || lign > 9) || (col < 1 || col > 7));
-    getinfo();
-    if(tab[lign - 1][col - 1].Player.color == BLUE) {
-	// analyse his moves
-	checkMoves();
-	// move his piece
-	movePiece();
-    } else if(tab[lign - 1][col - 1].Player.color == RED) {
-	// analyse his moves
-	checkMoves();
-	// move his piece
-	movePiece();
+	printf("Where would you like to move ?\n 1: front \n 2:left\n 3:right");
+	scanf("%d", &answer);
+    } while(answer < 1 || answer > 3);
+	
+    if(tab[lign][col].Player.color == BLUE) {
+		if(answer )
+    } else if(tab[lign][col].Player.color == RED) {
+
     } else {
 	printf("Error occured while analysing the answer");
 	exit(EXIT_FAILURE);
     }
 }
+void answer(playerPieces Blue[], playerPieces Red[], table tab[][DimC])
+{
+    int lign, col,sure;
+    do {
+	sure = 1;
+	printf("Which piece would you like to move ? (X,Y)");
+	scanf(" %d %d", &lign, &col);
+	printf("\n Is this is the piece you would like to move?");
+	getinfo();
+	// add sure =1 continue sure = 0 redo !!
+    } while((lign < 1 || lign > 9) || (col < 1 || col > 7) || (tab[lign][col].Player.order == -1));
+    // get piece info
+    getinfo();
+    // analyse his moves
+    checkMoves();
+    // move his piece
+    movePiece();
+}
+
 void gameChecker()
 {
 }
+
+void Display()
+{
+}
+
+void movePiece()
+{
+}
+
+void getGameInfo(table tab[][DimC], int lign, int col)
+{ // NOT DONE
+    char color[DIM_CHAR];
+    if(tab[lign][col].Player.order == -1)
+	printf("this place is empty");
+    else {
+	(tab[lign][col].Player.color == BLUE) ? strcpy(color, "Blue") : strcpy(color, "Red");
+	printf("\t Order: %d\n", tab[lign][col].Player.order);
+	printf("\t inwater: %d\n", tab[lign][col].Player.inWater);
+	printf("\t canwater: %d\n", tab[lign][col].Player.canWater);
+	printf("\t canleep: %d\n", tab[lign][col].Player.canLeep);
+	printf("\t name: %s\n", tab[lign][col].Player.name);
+	printf("\t Character: %c\n", tab[lign][col].Player.character);
+	printf("\t subCharacter: %c\n\n", tab[lign][col].Player.subcharacter);
+    }
+}
+
 void pieceInit(playerPieces Blue[], playerPieces Red[]) // ralph
 {
     int i;
@@ -402,34 +303,7 @@ void pieceInit(playerPieces Blue[], playerPieces Red[]) // ralph
 	}
     }
 }
-void Display()
-{
-}
-void movePiece()
-{
-}
-void getGameInfo(table tab[][DimC], int lign, int col)
-{ // NOT DONE
-    char color[DIM_CHAR];
-    (tab[lign][col].Player.color == BLUE) ? color = "Blue" : color = "Red";
-    (tab[lign][col].Player.color == BLUE) ? printf("blue") : printf("error blue");
-    printf("\t Order: %d\n", Blue[i].order);
-    printf("\t inwater: %d\n", Blue[i].inWater);
-    printf("\t canwater: %d\n", Blue[i].canWater);
-    printf("\t canleep: %d\n", Blue[i].canLeep);
-    printf("\t name: %s\n", Blue[i].name);
-    printf("\t Character: %c\n", Blue[i].character);
-    printf("\t subCharacter: %c\n\n", Blue[i].subcharacter);
-    printf("Red:\n");
-    (tab[lign][col].Player.color == RED) ? printf("red") : printf("error red");
-    printf("\t Order: %d\n", Red[i].order);
-    printf("\t inwater: %d\n", Red[i].inWater);
-    printf("\t canwater: %d\n", Red[i].canWater);
-    printf("\t canleep: %d\n", Red[i].canLeep);
-    printf("\t name: %s\n", Red[i].name);
-    printf("\t Character: %c\n", Red[i].character);
-    printf("\t subCharacter: %c\n\n", Red[i].subcharacter);
-}
+
 char* getColor(colorType player)
 {
     switch(player) {
@@ -440,3 +314,162 @@ char* getColor(colorType player)
     }
     return 0;
 }
+
+void gameinit(playerPieces Blue[], playerPieces Red[], playerPieces* nothing, table tab[][DimC])
+{
+    int i, j;
+
+    // initialisation of a case where there is nothing
+    nothing->canLeep = 0;
+    nothing->canWater = 0;
+    nothing->character = ' ';
+    nothing->subcharacter = ' ';
+    nothing->color = 0;
+    nothing->order = -1;
+    nothing->inWater = 0;
+
+    pieceInit(Blue, Red);
+    for(i = 0; i < DimL; i++) {
+	for(j = 0; j < DimC; j++) {
+
+	    // initialisation of BLUE PIECES
+	    if(i == 0) {
+		if(j == 0) {
+		    tab[i][j].Player = Blue[6];
+		    tab[i][j].State = EMPTY;
+		}
+
+		if((j == 2) || (j == 4) || (j == 3)) {
+		    tab[i][j].State = BTRAP; // define place for trap
+		    tab[i][j].Player.order = -1;
+		}
+
+		if(j == 3) {
+		    tab[i][j].State = FLAGBLUE; // define place for flag
+		    tab[i][j].Player.order = -1;
+		}
+		if(j == 6) {
+		    tab[i][j].Player = Blue[5];
+		    tab[i][j].State = EMPTY;
+		}
+	    }
+
+	    if(i == 1) {
+
+		if(j == 1) {
+		    tab[i][j].Player = Blue[3];
+		    tab[i][j].State = EMPTY;
+		}
+		if(j == 3) {
+		    tab[i][j].Player.order = -1;
+		}
+		if(j == 5) {
+		    tab[i][j].Player = Blue[1];
+		    tab[i][j].State = EMPTY;
+		}
+	    }
+
+	    if(i == 2) {
+		if(j == 0) {
+		    tab[i][j].Player = Blue[0];
+		    tab[i][j].State = EMPTY;
+		}
+		if(j == 2) {
+		    tab[i][j].Player = Blue[4];
+		    tab[i][j].State = EMPTY;
+		}
+		if(j == 4) {
+		    tab[i][j].Player = Blue[2];
+		    tab[i][j].State = EMPTY;
+		}
+		if(j == 6) {
+		    tab[i][j].Player = Blue[7];
+		    tab[i][j].State = EMPTY;
+		}
+	    }
+
+	    // intialisation of water
+	    if(i == 3 || i == 4 || i == 5) {
+
+		if(j == 1 || j == 2 || j == 4 || j == 5) {
+		    tab[i][j].Player = *nothing;
+		    tab[i][j].State = WATER;
+		}
+	    }
+
+	    //************** INITIALISATION OF RED PIECES**************
+	    if(i == 6) {
+
+		if(j == 0) {
+		    tab[i][j].Player = Red[7];
+		    tab[i][j].State = EMPTY;
+		}
+		if(j == 2) {
+		    tab[i][j].Player = Red[2];
+		    tab[i][j].State = EMPTY;
+		}
+		if(j == 4) {
+		    tab[i][j].Player = Red[4];
+		    tab[i][j].State = EMPTY;
+		}
+		if(j == 6) {
+		    tab[i][j].Player = Red[0];
+		    tab[i][j].State = EMPTY;
+		}
+	    }
+	    if(i == 7) {
+		if(j == 1) {
+		    tab[i][j].Player = Red[1];
+		    tab[i][j].State = EMPTY;
+		}
+		if(j == 3) {
+		    tab[i][j].Player.order = -1;
+		    tab[i][j].State = RTRAP;
+		}
+		if(j == 5) {
+		    tab[i][j].Player = Red[3];
+		    tab[i][j].State = EMPTY;
+		}
+	    }
+	    if(i == 8) {
+		if(j == 0) {
+		    tab[i][j].Player = Red[5];
+		    tab[i][j].State = EMPTY;
+		}
+		if(j == 2 || j == 4) {
+		    tab[i][j].Player.order = -1;
+		    tab[i][j].State = RTRAP;
+		}
+		if(j == 6) {
+		    tab[i][j].Player = Red[6];
+		    tab[i][j].State = EMPTY;
+		}
+	    } else {
+		tab[i][j].State = EMPTY;
+		tab[i][j].Player = *nothing;
+	    }
+	}
+    }
+}
+
+void color(int couleurDuTexte, int couleurDuFond)
+{
+    HANDLE H = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(H, couleurDuFond * 16 + couleurDuTexte);
+}
+// 0.Noir
+// 1.Bleu fonc�
+// 2.Vert fonc�
+// 3.Turquoise
+// 4.Rouge fonc�
+// 5.Violet
+// 6.Vert caca d'oie
+// 7.Gris clair
+// 8.Gris fonc�
+// 9.Bleu fluo
+// 10.Vert fluo
+// 11.Turquoise
+// 12.Rouge fluo
+// 13.Violet 2
+// 14.Jaune
+// 15.Blanc
