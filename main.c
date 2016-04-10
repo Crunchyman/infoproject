@@ -103,10 +103,22 @@ void checkMoves(table tab[][DimC], int lign, int col)
 	scanf("%d", &answer);
     } while(answer < 1 || answer > 3);
 	
-    if(tab[lign][col].Player.color == BLUE) {
-		if(answer )
+    if(tab[lign-1][col-1].Player.color == BLUE) {
+		//need to check if water and if he can get into the water
+		//same thing for the red so just copy paste
+		//BLUE
+		// 1 : front  tab[lign][col]
+		// 2: left tab[lign-1][col-2]
+		// 3: right tab[lign-1][col]
+		
+		if(answer == 1){
+			if(tab[lign][col].Player.order)
+		}
     } else if(tab[lign][col].Player.color == RED) {
-
+		//RED
+		//1: front tab[lign-2][
+		//2:
+		//3:
     } else {
 	printf("Error occured while analysing the answer");
 	exit(EXIT_FAILURE);
