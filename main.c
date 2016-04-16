@@ -98,27 +98,54 @@ void playerRandomizer(colorType* player) // done but adapt to blue and red
 void checkMoves(table tab[][DimC], int lign, int col)
 {
     int answer;
+    table currentPiece = tab[lign - 1][col - 1];
+    table nextPiece;
     do {
 	printf("Where would you like to move ?\n 1: front \n 2:left\n 3:right");
 	scanf("%d", &answer);
     } while(answer < 1 || answer > 3);
-	
-    if(tab[lign-1][col-1].Player.color == BLUE) {
-		//need to check if water and if he can get into the water
-		//same thing for the red so just copy paste
-		//BLUE
-		// 1 : front  tab[lign][col]
-		// 2: left tab[lign-1][col-2]
-		// 3: right tab[lign-1][col]
-		
-		if(answer == 1){
-			if(tab[lign][col].Player.order)
+
+    if(currentPiece.Player.color == BLUE) {
+	// need to check if water and if he can get into the water
+	// same thing for the red so just copy paste
+	// BLUE
+	// 1 : front  tab[lign][col]
+	// 2: left tab[lign-1][col-2]
+	// 3: right tab[lign-1][col]
+	if(answer == 1) {
+	    nextPiece = tab[lign][col - 1];
+	    if(nextPiece.State != EMPTY) {
+		if(nextPiece.State == WATER && currentPiece.Player.canWater == 1) {
+		    movePiece();
+		} else if(nextPiece.State == WATER && currentPiece.Player.canLeep == 1) {
+
+		} else if(nextPiece.State == BTRAP) {
+
+		} else if(nextPiece.State == RTRAP) {
+
+		} else if(nextPiece.State == FLAGBLUE) {
+
+		} else if(nextPiece.State == FLAGRED) {
 		}
-    } else if(tab[lign][col].Player.color == RED) {
-		//RED
-		//1: front tab[lign-2][
-		//2:
-		//3:
+		// check for case of flag, trap, and water
+	    } else if(nextPiece.State == EMPTY) {
+		movePiece(); // add parameters current piece and next piece and table of course
+	    }
+	} else if(answer == 2) {
+	    if(tab[lign][col - 1])
+	} else if(answer == 3) {
+	}
+    } else if(currentPiece.color == RED) {
+	// RED
+	// 1: front tab[lign-2][
+	// 2:
+	// 3:
+	if(answer == 1) {
+	}
+	if(answer == 2) {
+	}
+	if(answer == 3) {
+	}
     } else {
 	printf("Error occured while analysing the answer");
 	exit(EXIT_FAILURE);
@@ -126,7 +153,7 @@ void checkMoves(table tab[][DimC], int lign, int col)
 }
 void answer(playerPieces Blue[], playerPieces Red[], table tab[][DimC])
 {
-    int lign, col,sure;
+    int lign, col, sure;
     do {
 	sure = 1;
 	printf("Which piece would you like to move ? (X,Y)");
@@ -151,10 +178,31 @@ void Display()
 {
 }
 
-void movePiece()
-{
-}
+void movePiece(table currentPiece, table nextPiece)
+{ // add table parameter, currentpiece parameter, nextpiece parameter
+    // check order in this one
+	if(nextPiece.State != EMPTY) {
+		if(nextPiece.State == WATER && currentPiece.Player.canWater == 1) {
+		    movePiece;
+		} else if(nextPiece.State == WATER && currentPiece.Player.canLeep == 1) {
 
+		} else if(nextPiece.State == BTRAP) {
+
+		} else if(nextPiece.State == RTRAP) {
+
+		} else if(nextPiece.State == FLAGBLUE) {
+
+		} else if(nextPiece.State == FLAGRED) {
+		}
+		// check for case of flag, trap, and water
+	    } else if(nextPiece.State == EMPTY) {
+		movePiece; // add parameters current piece and next piece and table of course
+	    }
+}
+void movePlace(table currentPiece,table nextPiece,playerPieces nothing){
+	nextPiece = currentPiece;
+	currentPiece = nothing;
+}
 void getGameInfo(table tab[][DimC], int lign, int col)
 { // NOT DONE
     char color[DIM_CHAR];
