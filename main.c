@@ -57,6 +57,7 @@ void gameinit(playerPieces B[], playerPieces R[], playerPieces* nothing, table t
 void playerChooser(colorType* player);                                                       // DONE, ralph
 void pieceInit(playerPieces Blue[], playerPieces Red[]);                                     // DONE, ralph
 void movePiece();
+void Display(table tab[][DimC]);
 //**************************END OF SUBPROGRAMS******************************
 int main()
 {
@@ -175,34 +176,95 @@ void gameChecker()
 {
 }
 
-void Display()
+void Display(table tab[][DimC])
 {
+    int i, j;
+    for(j = 0; j < DimC; j++) {
+	printf("\t%d", j);
+    }
+    printf("\n");
+    for(i = 0; i < DimL; i++) {
+	color(15, 0);
+	printf("%d   ", i);
+	for(j = 0; j < DimC; j++) {
+	    color(15, 0);
+	    printf(" | ");
+	    if(tab[i][j].Player.color == BLUE) {
+		if(tab[i][j].Player.inWater == 1) {
+		    color(15, 12);
+		    printPlayer(tab, i, j);
+		} else {
+		    color(15, 1);
+		    printPlayer(tab, i, j);
+		}
+	    } else if(tab[i][j].Player.color == RED) {
+		if(tab[i][j].Player.inWater == 1) {
+		    color(15, 12);
+		    printPlayer(tab, i, j);
+		} else {
+		    color(15, 4);
+		    printPlayer(tab, i, j);
+		}
+	    } else {
+		if(tab[i][j].State == EMPTY) {
+		    color(15, 0);
+		    printPlayer(tab, i, j);
+		} else if(tab[i][j].State == WATER) {
+		    color(15, 11);
+		    printPlayer(tab, i, j);
+		} else if(tab[i][j].State == RTRAP) {
+		    color(5, 4);
+		    printPlayer(tab, i, j);
+		} else if(tab[i][j].State == BTRAP) {
+		    color(5, 1);
+		    printPlayer(tab, i, j);
+		} else if(tab[i][j].State == FLAGRED) {
+		    color(15, 4);
+		    printPlayer(tab, i, j);
+		} else if(tab[i][j].State == FLAGBLUE) {
+		    color(15, 1);
+		    printPlayer(tab, i, j);
+		}
+	    }
+	}
+	printf("\n");
+	color(15, 0);
+	printf("   ----------------------------------------------------------\n");
+    }
 }
-
+void printPlayer(table tab[][DimC], int i, int j)
+{
+    printf("%c(%c)", tab[i][j].Player.character, tab[i][j].Player.subcharacter);
+    if(tab[i][j].Player.order == -1) {
+	printf(" ");
+    } else
+	printf("%d", tab[i][j].Player.order);
+}
 void movePiece(table currentPiece, table nextPiece)
 { // add table parameter, currentpiece parameter, nextpiece parameter
     // check order in this one
-	if(nextPiece.State != EMPTY) {
-		if(nextPiece.State == WATER && currentPiece.Player.canWater == 1) {
-		    movePiece;
-		} else if(nextPiece.State == WATER && currentPiece.Player.canLeep == 1) {
+    if(nextPiece.State != EMPTY) {
+	if(nextPiece.State == WATER && currentPiece.Player.canWater == 1) {
+	    movePiece;
+	} else if(nextPiece.State == WATER && currentPiece.Player.canLeep == 1) {
 
-		} else if(nextPiece.State == BTRAP) {
+	} else if(nextPiece.State == BTRAP) {
 
-		} else if(nextPiece.State == RTRAP) {
+	} else if(nextPiece.State == RTRAP) {
 
-		} else if(nextPiece.State == FLAGBLUE) {
+	} else if(nextPiece.State == FLAGBLUE) {
 
-		} else if(nextPiece.State == FLAGRED) {
-		}
-		// check for case of flag, trap, and water
-	    } else if(nextPiece.State == EMPTY) {
-		movePiece; // add parameters current piece and next piece and table of course
-	    }
+	} else if(nextPiece.State == FLAGRED) {
+	}
+	// check for case of flag, trap, and water
+    } else if(nextPiece.State == EMPTY) {
+	movePiece; // add parameters current piece and next piece and table of course
+    }
 }
-void movePlace(table currentPiece,table nextPiece,playerPieces nothing){
-	nextPiece = currentPiece;
-	currentPiece = nothing;
+void movePlace(table currentPiece, table nextPiece, playerPieces nothing)
+{
+    nextPiece = currentPiece;
+    currentPiece = nothing;
 }
 void getGameInfo(table tab[][DimC], int lign, int col)
 { // NOT DONE
@@ -388,129 +450,61 @@ void gameinit(playerPieces Blue[], playerPieces Red[], playerPieces* nothing, ta
     nothing->color = 0;
     nothing->order = -1;
     nothing->inWater = 0;
+    nothing->color = N;
 
     pieceInit(Blue, Red);
     for(i = 0; i < DimL; i++) {
 	for(j = 0; j < DimC; j++) {
-
-	    // initialisation of BLUE PIECES
-	    if(i == 0) {
-		if(j == 0) {
-		    tab[i][j].Player = Blue[6];
-		    tab[i][j].State = EMPTY;
-		}
-
-		if((j == 2) || (j == 4) || (j == 3)) {
-		    tab[i][j].State = BTRAP; // define place for trap
-		    tab[i][j].Player.order = -1;
-		}
-
-		if(j == 3) {
-		    tab[i][j].State = FLAGBLUE; // define place for flag
-		    tab[i][j].Player.order = -1;
-		}
-		if(j == 6) {
-		    tab[i][j].Player = Blue[5];
-		    tab[i][j].State = EMPTY;
-		}
-	    }
-
-	    if(i == 1) {
-
-		if(j == 1) {
-		    tab[i][j].Player = Blue[3];
-		    tab[i][j].State = EMPTY;
-		}
-		if(j == 3) {
-		    tab[i][j].Player.order = -1;
-		}
-		if(j == 5) {
-		    tab[i][j].Player = Blue[1];
-		    tab[i][j].State = EMPTY;
-		}
-	    }
-
-	    if(i == 2) {
-		if(j == 0) {
-		    tab[i][j].Player = Blue[0];
-		    tab[i][j].State = EMPTY;
-		}
-		if(j == 2) {
-		    tab[i][j].Player = Blue[4];
-		    tab[i][j].State = EMPTY;
-		}
-		if(j == 4) {
-		    tab[i][j].Player = Blue[2];
-		    tab[i][j].State = EMPTY;
-		}
-		if(j == 6) {
-		    tab[i][j].Player = Blue[7];
-		    tab[i][j].State = EMPTY;
-		}
-	    }
-
-	    // intialisation of water
-	    if(i == 3 || i == 4 || i == 5) {
-
-		if(j == 1 || j == 2 || j == 4 || j == 5) {
-		    tab[i][j].Player = *nothing;
-		    tab[i][j].State = WATER;
-		}
-	    }
-
-	    //************** INITIALISATION OF RED PIECES**************
-	    if(i == 6) {
-
-		if(j == 0) {
-		    tab[i][j].Player = Red[7];
-		    tab[i][j].State = EMPTY;
-		}
-		if(j == 2) {
-		    tab[i][j].Player = Red[2];
-		    tab[i][j].State = EMPTY;
-		}
-		if(j == 4) {
-		    tab[i][j].Player = Red[4];
-		    tab[i][j].State = EMPTY;
-		}
-		if(j == 6) {
-		    tab[i][j].Player = Red[0];
-		    tab[i][j].State = EMPTY;
-		}
-	    }
-	    if(i == 7) {
-		if(j == 1) {
-		    tab[i][j].Player = Red[1];
-		    tab[i][j].State = EMPTY;
-		}
-		if(j == 3) {
-		    tab[i][j].Player.order = -1;
-		    tab[i][j].State = RTRAP;
-		}
-		if(j == 5) {
-		    tab[i][j].Player = Red[3];
-		    tab[i][j].State = EMPTY;
-		}
-	    }
-	    if(i == 8) {
-		if(j == 0) {
-		    tab[i][j].Player = Red[5];
-		    tab[i][j].State = EMPTY;
-		}
-		if(j == 2 || j == 4) {
-		    tab[i][j].Player.order = -1;
-		    tab[i][j].State = RTRAP;
-		}
-		if(j == 6) {
-		    tab[i][j].Player = Red[6];
-		    tab[i][j].State = EMPTY;
-		}
-	    } else {
-		tab[i][j].State = EMPTY;
-		tab[i][j].Player = *nothing;
-	    }
+	    tab[i][j].Player = *nothing;
+	    tab[i][j].State = EMPTY;
 	}
     }
+    // initialisation pour les pieces bleus
+    tab[0][0].Player = Blue[6];
+    tab[0][2].State = BTRAP;
+    tab[0][3].State = FLAGBLUE;
+    tab[0][4].State = BTRAP;
+    tab[0][6].Player = Blue[5];
+
+    tab[1][1].Player = Blue[3];
+    tab[1][3].State = BTRAP;
+    tab[1][5].Player = Blue[1];
+
+    tab[2][0].Player = Blue[0];
+    tab[2][2].Player = Blue[4];
+    tab[2][4].Player = Blue[2];
+    tab[2][6].Player = Blue[7];
+
+    tab[3][1].State = WATER;
+    tab[3][2].State = WATER;
+    tab[3][4].State = WATER;
+    tab[3][5].State = WATER;
+
+    tab[4][1].State = WATER;
+    tab[4][2].State = WATER;
+    tab[4][4].State = WATER;
+    tab[4][5].State = WATER;
+
+    tab[5][1].State = WATER;
+    tab[5][2].State = WATER;
+    tab[5][4].State = WATER;
+    tab[5][5].State = WATER;
+
+    // initialisation des cases rouges
+    tab[6][0].Player = Red[7];
+    tab[6][2].Player = Red[2];
+    tab[6][4].Player = Red[4];
+    tab[6][6].Player = Red[0];
+
+    tab[7][1].Player = Red[1];
+    tab[7][3].State = RTRAP;
+    tab[7][5].Player = Red[3];
+
+    tab[8][0].Player = Red[5];
+    tab[8][2].State = RTRAP;
+    tab[8][3].State = FLAGRED;
+    tab[8][4].State = RTRAP;
+    tab[8][6].Player = Red[6];
 }
 
 void color(int couleurDuTexte, int couleurDuFond)
