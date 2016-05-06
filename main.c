@@ -384,6 +384,14 @@ void pieceInit(playerPieces Blue[], playerPieces Red[]) // ralph
 	    strcpy(Blue[i].name, "Tigre");
 	    Blue[i].character = 'T';
 	    Blue[i].subcharacter = ' ';
+
+	    Red[i].order = i;
+	    Red[i].inWater = 0;
+	    Red[i].canWater = 0;
+	    Red[i].canLeep = 1;
+	    strcpy(Red[i].name, "Tigre");
+	    Red[i].character = 'T';
+	    Red[i].subcharacter = ' ';
 	    break;
 	case 6:
 	    Blue[i].order = i;
@@ -426,7 +434,6 @@ void pieceInit(playerPieces Blue[], playerPieces Red[]) // ralph
 	}
     }
 }
-
 char* getColor(colorType player)
 {
     switch(player) {
