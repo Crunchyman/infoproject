@@ -22,6 +22,7 @@ typedef enum { EMPTY, WATER, RTRAP, BTRAP, FLAGRED, FLAGBLUE } state;
  * definir le drapeau.
  * */
 /*
+//VOUS AVEZ INTERET A REUSSIR
 USE STR COPY !!!
 //done
 */
