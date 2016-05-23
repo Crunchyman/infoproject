@@ -71,22 +71,8 @@ int main()
     gameinit(Blue, Red, &nothing, tab);
 }
 
-void playerChooser(colorType* player) // done adapt to blue and red
-{
-    // blue = 1 red =2
-    int p;
-    if(*player == BLUE)
-	p = 1;
-    if(*player == RED)
-	p = 2;
-    p = p % 2 + 1;
-    if(p == 1)
-	*player = BLUE;
-    if(p == 2)
-	*player = RED;
-}
-
 void playerRandomizer(colorType* player) // done but adapt to blue and red
+                                         // DONE
 {
 
     int p;
@@ -95,85 +81,6 @@ void playerRandomizer(colorType* player) // done but adapt to blue and red
 	*player = BLUE;
     if(p == 2)
 	*player = RED;
-}
-
-void checkMoves(table tab[][DimC], int lign, int col)
-{
-    int answer;
-    table currentPiece = tab[lign - 1][col - 1];
-    table nextPiece;
-    do {
-	printf("Where would you like to move ?\n 1: front \n 2:left\n 3:right");
-	scanf("%d", &answer);
-    } while(answer < 1 || answer > 3);
-
-    if(currentPiece.Player.color == BLUE) {
-	// need to check if water and if he can get into the water
-	// same thing for the red so just copy paste
-	// BLUE
-	// 1 : front  tab[lign][col]
-	// 2: left tab[lign-1][col-2]
-	// 3: right tab[lign-1][col]
-	if(answer == 1) {
-	    nextPiece = tab[lign][col - 1];
-	    if(nextPiece.State != EMPTY) {
-		if(nextPiece.State == WATER && currentPiece.Player.canWater == 1) {
-		    movePiece();
-		} else if(nextPiece.State == WATER && currentPiece.Player.canLeep == 1) {
-
-		} else if(nextPiece.State == BTRAP) {
-
-		} else if(nextPiece.State == RTRAP) {
-
-		} else if(nextPiece.State == FLAGBLUE) {
-
-		} else if(nextPiece.State == FLAGRED) {
-		}
-		// check for case of flag, trap, and water
-	    } else if(nextPiece.State == EMPTY) {
-		movePiece(); // add parameters current piece and next piece and table of course
-	    }
-	} else if(answer == 2) {
-	    if(tab[lign][col - 1])
-	} else if(answer == 3) {
-	}
-    } else if(currentPiece.color == RED) {
-	// RED
-	// 1: front tab[lign-2][
-	// 2:
-	// 3:
-	if(answer == 1) {
-	}
-	if(answer == 2) {
-	}
-	if(answer == 3) {
-	}
-    } else {
-	printf("Error occured while analysing the answer");
-	exit(EXIT_FAILURE);
-    }
-}
-void answer(playerPieces Blue[], playerPieces Red[], table tab[][DimC])
-{
-    int lign, col, sure;
-    do {
-	sure = 1;
-	printf("Which piece would you like to move ? (X,Y)");
-	scanf(" %d %d", &lign, &col);
-	printf("\n Is this is the piece you would like to move?");
-	getinfo();
-	// add sure =1 continue sure = 0 redo !!
-    } while((lign < 1 || lign > 9) || (col < 1 || col > 7) || (tab[lign][col].Player.order == -1));
-    // get piece info
-    getinfo();
-    // analyse his moves
-    checkMoves();
-    // move his piece
-    movePiece();
-}
-
-void gameChecker()
-{
 }
 
 void Display(table tab[][DimC])
@@ -232,6 +139,88 @@ void Display(table tab[][DimC])
 	printf("   ----------------------------------------------------------\n");
     }
 }
+
+void playerChooser(colorType* player) // done adapt to blue and red
+                                      // DONE
+{
+    // blue = 1 red =2
+    int p;
+    if(*player == BLUE)
+	p = 1;
+    if(*player == RED)
+	p = 2;
+    p = p % 2 + 1;
+    if(p == 1)
+	*player = BLUE;
+    if(p == 2)
+	*player = RED;
+}
+
+void checkMoves(table tab[][DimC], int lign, int col)
+{
+    int answer;
+    table currentPiece = tab[lign][col];
+    table nextPiece;
+    do {
+	printf("Where would you like to move ?\n 1: front \n 2:left\n 3:right");
+	scanf("%d", &answer);
+    } while(answer < 1 || answer > 3);
+
+    if(currentPiece.Player.color == BLUE) {
+	// need to check if water and if he can get into the water
+	// same thing for the red so just copy paste
+	// BLUE
+	// 1 : front  tab[lign][col]
+	// 2: left tab[lign-1][col-2]
+	// 3: right tab[lign-1][col]
+	if(answer == 1) {
+	    nextPiece = tab[lign][col - 1];
+
+	} else if(answer == 2) {
+	    if(tab[lign][col - 1])
+	} else if(answer == 3) {
+	}
+    } else if(currentPiece.color == RED) {
+	// RED
+	// 1: front tab[lign-2][
+	// 2:
+	// 3:
+	if(answer == 1) {
+	}
+	if(answer == 2) {
+	}
+	if(answer == 3) {
+	}
+    } else {
+	printf("Error occured while analysing the answer");
+	exit(EXIT_FAILURE);
+    }
+}
+void answer(table tab[][DimC], colorType player)
+{
+    int lign, col, sure;
+    do {
+	printf("Which piece would you like to move ? (X,Y)");
+	scanf(" %d %d", &lign, &col);
+	if(tab[lign][col].Player.color == player) {
+	    do {
+		printf("\n Is this is the piece you would like to move? (1 = yes) (0 = no)");
+	    } while(sure != 0 || sure != 1);
+
+	    getGameInfo(tab, lign, col);
+	    scanf("%d", &sure);
+	}
+    } while((lign < 1 || lign > 9) || (col < 1 || col > 7) || (tab[lign][col].Player.order == -1) && sure == 0);
+    // analyse his moves
+    checkMoves();
+    // move his piece
+    movePiece();
+}
+
+void gameChecker()
+{
+}
+
 void printPlayer(table tab[][DimC], int i, int j)
 {
     printf("%c(%c)", tab[i][j].Player.character, tab[i][j].Player.subcharacter);
@@ -272,14 +261,11 @@ void getGameInfo(table tab[][DimC], int lign, int col)
     if(tab[lign][col].Player.order == -1)
 	printf("this place is empty");
     else {
-	(tab[lign][col].Player.color == BLUE) ? strcpy(color, "Blue") : strcpy(color, "Red");
+	printf("\t Name: %s\n", tab[lign][col].Player.name);
 	printf("\t Order: %d\n", tab[lign][col].Player.order);
-	printf("\t inwater: %d\n", tab[lign][col].Player.inWater);
-	printf("\t canwater: %d\n", tab[lign][col].Player.canWater);
-	printf("\t canleep: %d\n", tab[lign][col].Player.canLeep);
-	printf("\t name: %s\n", tab[lign][col].Player.name);
-	printf("\t Character: %c\n", tab[lign][col].Player.character);
-	printf("\t subCharacter: %c\n\n", tab[lign][col].Player.subcharacter);
+	printf("\t Inwater: %d\n", tab[lign][col].Player.inWater);
+	printf("\t Canwater: %d\n", tab[lign][col].Player.canWater);
+	printf("\t Canleep: %d\n", tab[lign][col].Player.canLeep);
     }
 }
 
@@ -520,14 +506,14 @@ void color(int couleurDuTexte, int couleurDuFond)
     SetConsoleTextAttribute(H, couleurDuFond * 16 + couleurDuTexte);
 }
 // 0.Noir
-// 1.Bleu fonc�
-// 2.Vert fonc�
+// 1.Bleu foncï¿½
+// 2.Vert foncï¿½
 // 3.Turquoise
-// 4.Rouge fonc�
+// 4.Rouge foncï¿½
 // 5.Violet
 // 6.Vert caca d'oie
 // 7.Gris clair
-// 8.Gris fonc�
+// 8.Gris foncï¿½
 // 9.Bleu fluo
 // 10.Vert fluo
 // 11.Turquoise
